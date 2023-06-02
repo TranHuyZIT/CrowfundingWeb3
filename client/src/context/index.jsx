@@ -5,7 +5,7 @@ import {
   useMetamask,
 } from "@thirdweb-dev/react";
 import { createContext, useContext } from "react";
-
+import { ethers } from "ethers";
 const StateContext = createContext();
 
 export const StateContextProvider = ({ children }) => {
@@ -21,23 +21,24 @@ export const StateContextProvider = ({ children }) => {
   const address = useAddress();
   const connect = useMetamask();
 
-  const publishCampaign = async () => {
+  const publishCampaign = async (form) => {
     let errorObject;
+    if (!address) await connect();
     try {
-      const data = await createCampaign([
-        address, // owner
-        form.title, // title
-        form.description, // description
-        form.target,
-        new Date(form.deadline).getTime(), // deadline,
-        form.image,
-      ]);
-      console.log(data);
+      return await createCampaign({
+        args: [
+          address, // owner
+          form.title, // title
+          form.description, // description
+          form.target,
+          new Date(form.deadline).getTime(), // deadline,
+          form.image,
+        ],
+      });
     } catch (error) {
       errorObject = error;
       console.log(error);
     }
-    return { data, isLoading, error: errorObject };
   };
   const getAllCampaigns = async () => {
     const allCampaigns = await contract.call("getCampaigns");

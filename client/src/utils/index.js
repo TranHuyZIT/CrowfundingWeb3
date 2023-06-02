@@ -20,3 +20,8 @@ export const checkIfImage = (url, callback) => {
   img.onload = () => callback(true);
   img.onerror = () => callback(false);
 };
+export const checkImageExist = (url) => {
+  const img = new Image();
+  img.src = url;
+  return img.complete;
+};

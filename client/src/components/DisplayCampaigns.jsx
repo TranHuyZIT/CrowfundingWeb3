@@ -18,7 +18,7 @@ const DisplayCampaigns = ({ title, isLoading, campaigns }) => {
         {!isLoading && campaigns.length == 0 && (
           <div className="flex justify-center flex-col w-full">
             <p className="font-epilogue font-semibold text-[14px] leading-[30px] text-[#818183] text-center">
-              You have not created any campigns yet
+              You have not created any campaigns yet
             </p>
             <button className="rounded bg-[#1ed5ae] text-white p-2 shadow-secondary m-auto">
               <Link to="/create-campaign">
@@ -28,7 +28,9 @@ const DisplayCampaigns = ({ title, isLoading, campaigns }) => {
           </div>
         )}
         {!isLoading &&
-          campaigns.map((campaign) => <FundCard campaign={campaign} />)}
+          campaigns.map((campaign, index) => (
+            <FundCard key={index} campaign={campaign} />
+          ))}
         {}
       </div>
     </div>

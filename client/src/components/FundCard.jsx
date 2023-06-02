@@ -1,7 +1,6 @@
 import { daysLeft } from "../utils";
 import { tagType, thirdweb } from "../assets";
 export default function FundCard({ campaign }) {
-  const remainingDays = daysLeft(deadline);
   const {
     owner,
     title,
@@ -12,6 +11,8 @@ export default function FundCard({ campaign }) {
     image,
     handleClick,
   } = campaign;
+  const remainingDays = daysLeft(deadline);
+
   return (
     <div
       className="sm:w-[288px] w-full rounded-[15px] bg-[#1c1c24] cursor-pointer"

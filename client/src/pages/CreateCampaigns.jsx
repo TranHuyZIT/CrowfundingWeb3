@@ -5,18 +5,30 @@ import * as Yup from "yup";
 import { useState } from "react";
 import FormField from "../components/FormField";
 import CustomButton from "../components/CustomButton";
+import { checkImageExist } from "../utils";
+import { ethers } from "ethers";
+import Loader from "../components/Loader";
 export default function CreateCampaign() {
   const { createCampaign } = useStateContext();
   const [isLoading, setIsLoading] = useState(false);
-
-  const handleFormFieldChange = (field, event) => {
-    setFormData({
-      ...formData,
-      [field]: event.target.value,
-    });
-  };
   const handleSubmit = async (values) => {
-    console.log(values);
+    try {
+      console.log(createCampaign);
+      setIsLoading(true);
+      console.log({
+        ...values,
+        target: ethers.utils.parseUnits(values.target + "", 18),
+      });
+      await createCampaign({
+        ...values,
+        target: ethers.utils.parseUnits(values.target + "", 18),
+      });
+      setIsLoading(false);
+      alert("Created successfully!");
+    } catch (error) {
+      console.log(error);
+      setIsLoading(false);
+    }
   };
   const validationSchema = Yup.object().shape({
     name: Yup.string("Your name must be a string.")
@@ -25,7 +37,7 @@ export default function CreateCampaign() {
     title: Yup.string("Your title must be a string.")
       .max(100, "Maximum character is 100.")
       .required("Your title cannot be empty."),
-    story: Yup.string("Your description must be a string.")
+    description: Yup.string("Your description must be a string.")
       .max(500, "Maximum character is 500.")
       .required("Your description cannot be empty."),
     target: Yup.number("Your target must be a number.")
@@ -34,7 +46,9 @@ export default function CreateCampaign() {
     deadline: Yup.string("Your deadline must be a string.").required(
       "Your deadline cannot be empty."
     ),
-    image: Yup.string("Image URL must be a string").url("Image must be a url"),
+    image: Yup.string()
+      .url("Image must be a url")
+      .test("imageCheck", "Invalid Image", checkImageExist),
   });
 
   return (
@@ -54,13 +68,20 @@ export default function CreateCampaign() {
           target: "",
           deadline: "",
           image: "",
-          story: "",
+          description: "",
         }}
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
         validateOnChange
       >
-        {({ errors, touched, handleChange, handleSubmit, setFieldTouched }) => {
+        {({
+          values,
+          errors,
+          touched,
+          handleChange,
+          handleSubmit,
+          setFieldTouched,
+        }) => {
           return (
             <form
               onSubmit={handleSubmit}
@@ -90,11 +111,11 @@ export default function CreateCampaign() {
               <FormField
                 errors={errors}
                 touched={touched}
-                labelName="Story *"
-                placeholder="Write your story"
+                labelName="Description *"
+                placeholder="Write your description"
                 isTextArea
                 handleChange={handleChange}
-                field="story"
+                field="description"
                 setFieldTouched={setFieldTouched}
               />
 
@@ -130,15 +151,24 @@ export default function CreateCampaign() {
                 />
               </div>
 
-              <FormField
-                errors={errors}
-                touched={touched}
-                labelName="Campaign image *"
-                placeholder="Place image URL of your campaign"
-                inputType="text"
-                handleChange={handleChange}
-                field="image"
-              />
+              <div className="flex flex-col items-center">
+                <FormField
+                  errors={errors}
+                  touched={touched}
+                  labelName="Campaign image *"
+                  placeholder="Place image URL of your campaign"
+                  inputType="text"
+                  handleChange={handleChange}
+                  field="image"
+                />
+                {!errors.image && (
+                  <img
+                    className="w-[200px] object-center mt-2
+                "
+                    src={values.image}
+                  />
+                )}
+              </div>
 
               <div className="flex justify-center items-center mt-[40px]">
                 <CustomButton
