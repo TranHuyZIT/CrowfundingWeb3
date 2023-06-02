@@ -9,7 +9,9 @@ import { createContext, useContext } from "react";
 const StateContext = createContext();
 
 export const StateContextProvider = ({ children }) => {
-  const contract = useContract("0x17F7227651952b865e1Dd875393Ac197C27DF853");
+  const { contract } = useContract(
+    "0x17F7227651952b865e1Dd875393Ac197C27DF853"
+  );
   const {
     mutateAsync: createCampaign,
     isLoading,
