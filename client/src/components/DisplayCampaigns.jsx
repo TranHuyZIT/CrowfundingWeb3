@@ -1,7 +1,12 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { loader } from "../assets";
 import FundCard from "./FundCard";
 const DisplayCampaigns = ({ title, isLoading, campaigns }) => {
+  const navigate = useNavigate();
+  const handleNavigate = (campaign) => {
+    console.log(campaign);
+    navigate(`/campaign-details/${campaign.title}`, { state: campaign });
+  };
   return (
     <div>
       <h1 className="font-epilogue font-semibold text-[18px] text-white text-left ">
@@ -29,7 +34,11 @@ const DisplayCampaigns = ({ title, isLoading, campaigns }) => {
         )}
         {!isLoading &&
           campaigns.map((campaign, index) => (
-            <FundCard key={index} campaign={campaign} />
+            <FundCard
+              key={index}
+              campaign={campaign}
+              handleClick={() => handleNavigate(campaign)}
+            />
           ))}
         {}
       </div>

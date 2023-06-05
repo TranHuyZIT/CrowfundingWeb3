@@ -4,6 +4,7 @@ import "./styles/Home.css";
 import Sidebar from "./components/SideBar";
 import Home from "./pages/Home";
 import CreateCampaign from "./pages/CreateCampaigns";
+import CampaignDetails from "./components/CampaignDetails";
 export default function App() {
   return (
     <div className="relative sm:-8 p-4 bg-[#13131a] min-h-screen flex flex-row">
@@ -14,6 +15,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home />}></Route>
           <Route path="/create-campaign" element={<CreateCampaign />} />
+          <Route path="/campaign-details/:id" element={<CampaignDetails />} />
         </Routes>
       </div>
     </div>

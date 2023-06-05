@@ -1,6 +1,6 @@
 import { daysLeft } from "../utils";
 import { tagType, thirdweb } from "../assets";
-export default function FundCard({ campaign }) {
+export default function FundCard({ campaign, handleClick }) {
   const {
     owner,
     title,
@@ -9,7 +9,6 @@ export default function FundCard({ campaign }) {
     deadline,
     amountCollected,
     image,
-    handleClick,
   } = campaign;
   const remainingDays = daysLeft(deadline);
 
